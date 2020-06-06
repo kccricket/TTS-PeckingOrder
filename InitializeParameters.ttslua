@@ -1,0 +1,45 @@
+PeckingOrder.Initialize.Parameters = {}
+PeckingOrder.Initialize.Parameters.Players = {}
+
+PeckingOrder.Initialize.Parameters.CardZonesScale = {3.17, 10.00, 4.62}
+PeckingOrder.Initialize.Parameters.CardZonesYPosition = 1.25
+PeckingOrder.Initialize.Parameters.HandScale = {4.00, 8.00, 1.50}
+PeckingOrder.Initialize.Parameters.HandZoneXPosition = -3.25
+PeckingOrder.Initialize.Parameters.HandZoneZPosition = 13
+PeckingOrder.Initialize.Parameters.DeckYPosition = 1.15
+PeckingOrder.Initialize.Parameters.DeckScale = {1.42, 1.00, 1.42}
+PeckingOrder.Initialize.Parameters.PerchZonesZPosition = 7
+PeckingOrder.Initialize.Parameters.PerchZonesXPositions = {
+    ['1'] = -20.68
+    , ['2'] = -16.55
+    , ['3'] = -12.39
+    , ['4'] = -8.33
+    , ['5'] = -4.25
+    , ['6'] = -0.17
+    , ['7'] = 3.89
+    , ['8A'] = 8
+    , ['8B'] = 12.2
+    , ['9'] = 16.32
+    , ['10'] = 20.48
+}
+
+PeckingOrder.Initialize.Parameters.Players[1] = {
+    Color = "Red"
+    , YRotation = 180
+    , PositionMultiplier = -1
+}
+
+PeckingOrder.Initialize.Parameters.Players[2] = {
+    Color = "Green"
+    , YRotation = 0
+    , PositionMultiplier = 1
+}
+
+PeckingOrder.Initialize.Parameters.CustomDeck = {
+    face = "http://kccricket.net/tts/pecking-order/FullDeck-5x3-v20170514.jpg"
+    , back = "http://kccricket.net/tts/pecking-order/Card-Back.jpg"
+    , width = 5
+    , height = 3
+    , number = 13
+    , back_is_hidden = true
+}

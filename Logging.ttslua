@@ -1,0 +1,6 @@
+function PeckingOrder.Log(args)
+    if PeckingOrder.Debug == true then
+        local out = string.format(unpack(args))
+        log(out)
+    end
+end

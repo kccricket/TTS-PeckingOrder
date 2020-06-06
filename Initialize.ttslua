@@ -1,0 +1,140 @@
+PeckingOrder.Initialize = {}
+
+#include InitializeParameters
+
+function PeckingOrder.Initialize.Players()
+    PeckingOrder.Log({
+        "Begin PeckingOrder.Initialize.Players"
+    })
+    for i, player in ipairs(PeckingOrder.Initialize.Parameters.Players) do
+        PeckingOrder.Players[i] = PeckingOrder.Initialize.Player(player, i)
+    end
+end
+
+function PeckingOrder.Initialize.Player(player_params, player_num)
+    PeckingOrder.Log({
+        "Begin PeckingOrder.Initialize.Player for player %d, %s."
+        , player_num
+        , player_params.Color
+    })
+    local new_player = {}
+    new_player.Color = player_params.Color
+    new_player.PerchZones = PeckingOrder.Initialize.PerchZones(player_params)
+    new_player.DeckObject = PeckingOrder.Initialize.DeckObject(player_params)
+    new_player.HandZone = PeckingOrder.Initialize.HandZone(player_params)
+    new_player.DiscardZone = PeckingOrder.Initialize.DiscardZone(player_params)
+    return new_player
+end
+
+function PeckingOrder.Initialize.PerchZones(player_params)
+    PeckingOrder.Log({
+        "Begin PeckingOrder.Initialize.PerchZones for player %s."
+        , player_params.Color
+    })
+    local new_perches = {}
+    for perch_num, x_position in pairs(PeckingOrder.Initialize.Parameters.PerchZonesXPositions) do
+        PeckingOrder.Log({
+            "Creating PerchZone %s for player %s."
+            , perch_num
+            , player_params.Color
+        })
+        new_perches[perch_num] = spawnObject({
+            position = {
+                x_position
+                , PeckingOrder.Initialize.Parameters.CardZonesYPosition
+                , PeckingOrder.Initialize.Parameters.PerchZonesZPosition * player_params.PositionMultiplier
+            }
+            , scale = PeckingOrder.Initialize.Parameters.CardZonesScale
+            , type = 'ScriptingTrigger'
+            , sound = false
+            , callback_function = function(zone)
+                PeckingOrder.Log({
+                    "Begin created callback for PerchZone %s for player %s."
+                    , perch_num
+                    , player_params.Color
+                })
+                zone.setVar('zone_type', PeckingOrder.Enums.ZoneType.Perch)
+                zone.setVar('perch_number', perch_num)
+                zone.setVar('player_color', player_params.Color)
+            end
+        })
+    end
+    return new_perches
+end
+
+function PeckingOrder.Initialize.DeckObject(player_params)
+    PeckingOrder.Log({
+        "Begin PeckingOrder.Initialize.DeckObject for player %s."
+        , player_params.Color
+    })
+    local new_deck = spawnObject({
+        position = {
+            PeckingOrder.Initialize.Parameters.HandZoneXPosition * -1 * player_params.PositionMultiplier
+            , PeckingOrder.Initialize.Parameters.DeckYPosition
+            , PeckingOrder.Initialize.Parameters.HandZoneZPosition * player_params.PositionMultiplier
+        }
+        , scale = PeckingOrder.Initialize.Parameters.DeckScale
+        , rotation = {0.00, player_params.YRotation, 180.00}
+        , type = "DeckCustom"
+        , sound = false
+        , callback_function = function(deck)
+            PeckingOrder.Log({
+                "Begin created callback for DeckObject for player %s."
+                , player_params.Color
+            })
+            deck.setVar('player_color', player_params.Color)
+        end
+    })
+    new_deck.setCustomObject(PeckingOrder.Initialize.Parameters.CustomDeck)
+    return new_deck
+end
+
+function PeckingOrder.Initialize.HandZone(player_params)
+    PeckingOrder.Log({
+        "Begin PeckingOrder.Initialize.HandZone for player %s."
+        , player_params.Color
+    })
+    return spawnObject({
+        position = {
+            PeckingOrder.Initialize.Parameters.HandZoneXPosition * player_params.PositionMultiplier
+            , PeckingOrder.Initialize.Parameters.CardZonesYPosition
+            , PeckingOrder.Initialize.Parameters.HandZoneZPosition * player_params.PositionMultiplier
+        }
+        , scale = PeckingOrder.Initialize.Parameters.CardZonesScale
+        , type = 'ScriptingTrigger'
+        , sound = false
+        , callback_function = function(zone)
+            PeckingOrder.Log({
+                "Begin created callback for HandZone for player %s."
+                , player_params.Color
+            })
+            zone.setVar('zone_type', PeckingOrder.Enums.ZoneType.Hand)
+            zone.setVar('player_color', player_params.Color)
+        end
+    })
+end
+
+function PeckingOrder.Initialize.DiscardZone(player_params)
+    PeckingOrder.Log({
+        "Begin PeckingOrder.Initialize.DiscardZone for player %s."
+        , player_params.Color
+    })
+    return spawnObject({
+        position = {
+            PeckingOrder.Initialize.Parameters.HandZoneXPosition * player_params.PositionMultiplier * 3
+            , PeckingOrder.Initialize.Parameters.CardZonesYPosition
+            , PeckingOrder.Initialize.Parameters.HandZoneZPosition * player_params.PositionMultiplier
+        }
+        , scale = PeckingOrder.Initialize.Parameters.CardZonesScale
+        , type = 'ScriptingTrigger'
+        , sound = false
+        , callback_function = function(zone)
+            PeckingOrder.Log({
+                "Begin created callback for DiscardZone for player %s."
+                , player_params.Color
+            })
+            zone.setVar('zone_type', PeckingOrder.Enums.ZoneType.Discard)
+            zone.setVar('player_color', player_params.Color)
+        end
+    })
+end

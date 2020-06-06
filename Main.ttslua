@@ -1,0 +1,278 @@
+local PeckingOrder = {}
+PeckingOrder.Players = {}
+PeckingOrder.State = {}
+
+PeckingOrder.Debug = true
+
+#include Logging
+#include Enums
+#include Initialize
+
+PeckingOrder.State.ChallengeData = nil
+--local TurnsLeft = 26
+PeckingOrder.State.TurnsLeft = 10
+
+function onload()
+
+    PeckingOrder.Initialize.Players()
+end
+
+
+
+
+--[[ The Update function. This is called once per frame. --]]
+function update ()
+    --[[ print('Update loop!') --]]
+end
+
+-- function onObjectDrop(PlayerColor, DroppedObject)
+--     print("onObjectDrop")
+--     if ObjectIsCard(DroppedObject) then
+--         -- DroppedObject.setVar('player_color', PlayerColor)
+--         HandleCardDrop(PlayerColor, DroppedObject)
+--     end
+-- end
+
+-- function onObjectLeaveScriptingZone(Zone, LeavingObject)
+--     print("onObjectLeaveScriptingZone")
+--     if ObjectIsCard(LeavingObject) then
+--         if Zone.getVar('zone_type') == ZoneType.Hand and ObjectIsCard(LeavingObject) then
+--             FlipCardFaceDown(LeavingObject)
+--         end
+--     end
+-- end
+
+-- function onObjectLeaveContainer(Container, LeavingObject)
+--     print('onObjectLeaveContainer')
+--
+--     if ObjectIsCard(LeavingObject) and Container.tag == 'Deck' then
+--         local playerColor = Container.getVar('player_color')
+--         LeavingObject.setVar('player_color', playerColor)
+--         if #GetCardsInZone(getObjectFromGUID(Hands[playerColor])) > 1 then
+--             ReturnCardToDeck(playerColor, LeavingObject, "Your hand already contains a card.")
+--         end
+--     end
+-- end
+
+-- function onPlayerTurnEnd(PlayerColorEnd, PlayerColorNext)
+--     if ChallengeData then
+--         ResolveChallenge(ChallengeData)
+--         ChallengeData = nil
+--         TurnsLeft = TurnsLeft - 1
+--         print(tostring(TurnsLeft))
+--         if(TurnsLeft == 0) then
+--             ScoreGame(PlayerColorNext)
+--         end
+--     end
+-- end
+
+-- function ScoreGame(ScorePlayerFirst)
+--     local Scores = {
+--         [PLAYER_TWO] = 0,
+--         [PLAYER_ONE] = 0
+--     }
+--     local ScoreList = {
+--         [PLAYER_TWO] = {},
+--         [PLAYER_ONE] = {}
+--     }
+--     for PlayerColor, PerchList in pairs(Perches) do
+--         for PerchNumber, PerchGuid in pairs(PerchList) do
+--             if #GetCardsInZone(getObjectFromGUID(PerchGuid)) == 1 then
+--                 Scores[PlayerColor] = Scores[PlayerColor] + PERCH_VALUES[PerchNumber]
+--                 table.insert(ScoreList[PlayerColor], PERCH_VALUES[PerchNumber])
+--             end
+--         end
+--         -- Add 3 point bonus for controlling both 8 perches.
+--         if #GetCardsInZone(getObjectFromGUID(PerchList['8A'])) + #GetCardsInZone(getObjectFromGUID(PerchList['8B'])) == 2 then
+--             Scores[PlayerColor] = Scores[PlayerColor] + 3
+--         end
+--         print(PlayerColor .. ' ' .. tostring(Scores[PlayerColor]))
+--     end
+-- end
+
+-- function PlayerIsValid(PlayerColor)
+--     return PlayerColor == PLAYER_TWO or PlayerColor == PLAYER_ONE
+-- end
+
+-- function HandleCardDrop(PlayerColor, Card)
+--     print("HandleCardDrop")
+--     if not CardIsInHand(PlayerColor, Card) and not Card.isSmoothMoving() then
+--         local PerchZones = GetZonesContainingCard(PERCHES[PlayerColor], Card.guid)
+--         if #PerchZones == 1 then
+--             local Perch = PerchZones[1]
+--             if #GetCardsInZone(Perch) == 1 then
+--                 SnapObjectToZone(Card, Perch)
+--                 ChallengeData = { ['PlayerColor'] = PlayerColor, ['Perch'] = Perch, ['Card'] = Card }
+--             else
+--                 ReturnCardToHand(PlayerColor, Card, 'This perch is not a valid location for play.')
+--             end
+--         elseif #PerchZones > 1 then
+--             ReturnCardToHand(PlayerColor, Card, 'Cards may not touch more than one perch.')
+--         else
+--             ReturnCardToHand(PlayerColor, Card, 'Cards must be placed on a perch.')
+--         end
+--     end
+-- end
+
+-- function SnapObjectToZone(Object, Zone)
+--     print('SnapObjectToZone')
+--     local TargetPosition = Zone.getPosition()
+--     Object.setPositionSmooth(TargetPosition)
+-- end
+--
+-- function ResolveChallenge(Parameters)
+--     local AttackerPlayer = Parameters.PlayerColor
+--     local AttackerPerch = Parameters.Perch
+--     local AttackerCard = Parameters.Card
+--     print('ResolveChallenge')
+--     local DefenderPlayer
+--     if AttackerPlayer == PLAYER_ONE then
+--         DefenderPlayer = PLAYER_TWO
+--     else
+--         DefenderPlayer = PLAYER_ONE
+--     end
+--     local PerchNumber = AttackerPerch.getVar('perch_number')
+--     local DefenderPerch = getObjectFromGUID(PERCHES[DefenderPlayer][PerchNumber])
+--     local DefenderCard = GetCardsInZone(DefenderPerch)[1]
+--     if DefenderCard then
+--         print('DefenderCard is not nil')
+--         if CardIsJaguar(AttackerCard) or CardIsJaguar(DefenderCard) then
+--             if CardIsJaguar(AttackerCard) then
+--                 AttackerCard.flip()
+--             elseif CardIsJaguar(DefenderCard) then
+--                 DefenderCard.flip()
+--             end
+--             DoDelayedCardDiscard({ AttackerCard, DefenderCard })
+--         else
+--             local DefenderStrength = tonumber(DefenderCard.getName())
+--             local AttackerStrength = tonumber(AttackerCard.getName())
+--             FlipCardFaceUp(DefenderCard)
+--             if AttackerStrength > DefenderStrength or AttackerStrength == DefenderStrength then
+--                 DoDelayedCardDiscard({ DefenderCard })
+--             elseif DefenderStrength > AttackerStrength or (AttackerStrength == DefenderStrength and PlayerControlsTieBreaker(DefenderPlayer)) then
+--                 DoDelayedCardDiscard({ AttackerCard })
+--             end
+--         end
+--     end
+-- end
+--
+-- function CardIsJaguar(Card)
+--     return Card.getName() == 'Jaguar'
+-- end
+--
+-- function FlipCardFaceUp(Card)
+--     if CardIsFaceDown(Card) then
+--         Card.flip()
+--     end
+-- end
+--
+-- function FlipCardFaceDown(Card)
+--     if CardIsFaceUp(Card) then
+--         Card.flip()
+--     end
+-- end
+--
+-- function CardIsFaceUp(Card)
+--     return not Card.is_face_down
+-- end
+--
+-- function CardIsFaceDown(Card)
+--     return Card.is_face_down
+-- end
+--
+-- function DoDelayedCardDiscard(Cards)
+--     Timer.create({
+--         delay = 3,
+--         identifier = 'DiscardCards'..os.time()..Cards[1].guid,
+--         function_name = 'DoImmediateCardDiscard',
+--         parameters = Cards
+--     })
+-- end
+--
+-- function DoImmediateCardDiscard(Cards)
+--     for Index, Card in ipairs(Cards) do
+--         local PlayerColor = Card.getVar('player_color')
+--         local Discard = getObjectFromGUID(Discards[PlayerColor])
+--         SnapObjectToZone(Card, Discard)
+--         Card.lock()
+--     end
+-- end
+--
+-- function ReturnCardToHand(PlayerColor, Card, Message)
+--     print("ReturnCardToHand")
+--     -- local Hand = getObjectFromGUID(Hands[Card.getVar('player_color')])
+--     PrintPlayerWarning(PlayerColor, Message)
+--     -- SnapObjectToZone(Card, Hand)
+--     Card.deal(1, PlayerColor)
+-- end
+--
+-- function ReturnCardToDeck(PlayerColor, Card, Message)
+--     print("ReturnCardToDeck")
+--     local Deck = getObjectFromGUID(Decks[Card.getVar('player_color')])
+--     PrintPlayerWarning(PlayerColor, Message)
+--     -- SnapObjectToZone(Card, Deck)
+--     local currentPosition = Card.getPosition()
+--     local newPosition = { x = currentPosition.x, y = currentPosition.y, z = currentPosition.z + 1 }
+--     Card.setPosition(newPosition, false, true)
+--     Card.putObject(Deck)
+-- end
+--
+-- function GetZonesContainingCard(Zones, CardGuid)
+--     print("GetZonesContainingCard")
+--     local Result = {}
+--     for Location, ZoneGuid in pairs(Zones) do
+--         local Zone = getObjectFromGUID(ZoneGuid)
+--         if ZoneContainsCard(Zone, CardGuid) then
+--             table.insert(Result, Zone)
+--         end
+--     end
+--     return Result
+-- end
+--
+-- function ZoneContainsCard(Zone, CardGuid)
+--     print('ZoneContainsCard')
+--     local Result = false
+--     local ObjectsInZone = GetCardsInZone(Zone)
+--     if ObjectsInZone then
+--         for Index, Object in ipairs(ObjectsInZone) do
+--             if Object.guid == CardGuid then
+--                 Result = true
+--             end
+--         end
+--     end
+--     return Result
+-- end
+--
+-- function GetCardsInZone(Zone)
+--
+--     local result = {}
+--     local objectsInZone = Zone.getObjects()
+--     if objectsInZone then
+--         for index, object in ipairs(objectsInZone) do
+--             if ObjectIsCard(object) then
+--                 table.insert(result, object)
+--             end
+--         end
+--     end
+--     print(string.format("GetCardsInZone: %i", #result))
+--     return result
+-- end
+--
+-- function ObjectIsCard(Object)
+--     return Object.tag == 'Card'
+-- end
+--
+-- function CardIsInHand(PlayerColor, Card)
+--
+--     local result = false;
+--     local handZone = getObjectFromGUID(Hands[PlayerColor])
+--     if ZoneContainsCard(handZone, Card) then
+--         result = true
+--     end
+--     print(string.printf("CardIsInHand: %s is %s for %s", Card.getName(), tostring(result), PlayerColor))
+--     return result
+-- end
+--
+-- function PrintPlayerWarning(PlayerColor, Message)
+--     printToColor(Message, PlayerColor, TextColors.Yellow)
+-- end

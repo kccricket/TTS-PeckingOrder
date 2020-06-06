@@ -1,0 +1,16 @@
+PeckingOrder.Enums = {}
+
+PeckingOrder.Enums.Color = {
+    Yellow = {r=1,g=1,b=0}
+    , Blue = {r=0,g=0,b=1}
+    , Red = {r=1,g=0,b=0}
+    , Green = {r=0,g=1,b=0}
+    , Black = {r=0,g=0,b=0}
+    , White = {r=1,g=1,b=1}
+}
+
+PeckingOrder.Enums.ZoneType = {
+    Perch = 'Perch'
+    , Hand = 'Hand'
+    , Discard = 'Discard'
+}
