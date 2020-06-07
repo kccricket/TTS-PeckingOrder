@@ -1,0 +1,18 @@
+PeckingOrder.Events = {}
+
+function PeckingOrder.Events.OnLoad(save_data)
+    PeckingOrder.Initialize.Start()
+end
+
+function PeckingOrder.Events.OnObjectLeaveScriptingZone(zone, leaving_object)
+    PeckingOrder.Log({
+        "Begin PeckingOrder.Events.OnObjectLeaveScriptingZone for zone %s and object %s"
+        , zone.guid
+        , leaving_object.guid
+    })
+    if PeckingOrder.Helpers.ObjectIsCard(leaving_object) then
+        if zone.getVar('zone_type') == PeckingOrder.Enums.ZoneType.Hand then
+            PeckingOrder.Helpers.FlipCardFaceDown(leaving_object)
+        end
+    end
+end

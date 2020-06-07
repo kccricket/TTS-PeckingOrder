@@ -2,27 +2,21 @@ local PeckingOrder = {}
 PeckingOrder.Players = {}
 PeckingOrder.State = {}
 
+
 PeckingOrder.Debug = true
 
 #include Logging
 #include Enums
+#include Helpers
 #include Initialize
+#include Events
 
 PeckingOrder.State.ChallengeData = nil
 --local TurnsLeft = 26
 PeckingOrder.State.TurnsLeft = 10
 
-function onload()
-
-    PeckingOrder.Initialize.Players()
-end
-
-
-
-
---[[ The Update function. This is called once per frame. --]]
-function update ()
-    --[[ print('Update loop!') --]]
+function onLoad(save_data)
+    PeckingOrder.Events.OnLoad(save_data)
 end
 
 -- function onObjectDrop(PlayerColor, DroppedObject)
@@ -33,14 +27,9 @@ end
 --     end
 -- end
 
--- function onObjectLeaveScriptingZone(Zone, LeavingObject)
---     print("onObjectLeaveScriptingZone")
---     if ObjectIsCard(LeavingObject) then
---         if Zone.getVar('zone_type') == ZoneType.Hand and ObjectIsCard(LeavingObject) then
---             FlipCardFaceDown(LeavingObject)
---         end
---     end
--- end
+function onObjectLeaveScriptingZone(zone, leaving_object)
+    PeckingOrder.Events.OnObjectLeaveScriptingZone(zone, leaving_object)
+end
 
 -- function onObjectLeaveContainer(Container, LeavingObject)
 --     print('onObjectLeaveContainer')
@@ -258,9 +247,6 @@ end
 --     return result
 -- end
 --
--- function ObjectIsCard(Object)
---     return Object.tag == 'Card'
--- end
 --
 -- function CardIsInHand(PlayerColor, Card)
 --

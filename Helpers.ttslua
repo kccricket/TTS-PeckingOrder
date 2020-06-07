@@ -1,0 +1,25 @@
+PeckingOrder.Helpers = {}
+
+function PeckingOrder.Helpers.ObjectIsCard(object)
+    return object.tag == 'Card'
+end
+
+function PeckingOrder.Helpers.FlipCardFaceUp(card)
+    if PeckingOrder.Helpers.CardIsFaceDown(card) then
+        card.flip()
+    end
+end
+
+function PeckingOrder.Helpers.FlipCardFaceDown(card)
+    if PeckingOrder.Helpers.CardIsFaceUp(card) then
+        card.flip()
+    end
+end
+
+function PeckingOrder.Helpers.CardIsFaceUp(card)
+    return not card.is_face_down
+end
+
+function PeckingOrder.Helpers.CardIsFaceDown(card)
+    return card.is_face_down
+end

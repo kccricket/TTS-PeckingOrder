@@ -2,6 +2,13 @@ PeckingOrder.Initialize = {}
 
 #include InitializeParameters
 
+PeckingOrder.Initialize.SnapPoints = {}
+
+function PeckingOrder.Initialize.Start()
+    PeckingOrder.Initialize.Players()
+    Global.setSnapPoints(PeckingOrder.Initialize.SnapPoints)
+end
+
 function PeckingOrder.Initialize.Players()
     PeckingOrder.Log({
         "Begin PeckingOrder.Initialize.Players"
@@ -38,12 +45,13 @@ function PeckingOrder.Initialize.PerchZones(player_params)
             , perch_num
             , player_params.Color
         })
+        position = {
+            x_position
+            , PeckingOrder.Initialize.Parameters.CardZonesYPosition
+            , PeckingOrder.Initialize.Parameters.PerchZonesZPosition * player_params.PositionMultiplier
+        }
         new_perches[perch_num] = spawnObject({
-            position = {
-                x_position
-                , PeckingOrder.Initialize.Parameters.CardZonesYPosition
-                , PeckingOrder.Initialize.Parameters.PerchZonesZPosition * player_params.PositionMultiplier
-            }
+            position = position
             , scale = PeckingOrder.Initialize.Parameters.CardZonesScale
             , type = 'ScriptingTrigger'
             , sound = false
@@ -58,7 +66,13 @@ function PeckingOrder.Initialize.PerchZones(player_params)
                 zone.setVar('player_color', player_params.Color)
             end
         })
+        table.insert(PeckingOrder.Initialize.SnapPoints, {
+            position = position
+            , rotation = {0, player_params.YRotation, 0}
+            , rotation_snap = true
+        })
     end
+
     return new_perches
 end
 
