@@ -6,9 +6,10 @@ end
 
 function PeckingOrder.Events.OnObjectLeaveScriptingZone(zone, leaving_object)
     PeckingOrder.Log({
-        "Begin PeckingOrder.Events.OnObjectLeaveScriptingZone for zone %s and object %s"
+        "Begin PeckingOrder.Events.OnObjectLeaveScriptingZone for zone %s and object %s owned by player %s"
         , zone.guid
         , leaving_object.guid
+        , leaving_object.getVar('player_color')
     })
     if PeckingOrder.Helpers.ObjectIsCard(leaving_object) then
         if zone.getVar('zone_type') == PeckingOrder.Enums.ZoneType.Hand then
