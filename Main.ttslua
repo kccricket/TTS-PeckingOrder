@@ -3,7 +3,7 @@ PeckingOrder.Players = {}
 PeckingOrder.State = {}
 
 
-PeckingOrder.Debug = true
+PeckingOrder.Debug = false
 
 #include Logging
 #include Enums
@@ -11,9 +11,9 @@ PeckingOrder.Debug = true
 #include Initialize
 #include Events
 
-PeckingOrder.State.ChallengeData = nil
+--PeckingOrder.State.ChallengeData = nil
 --local TurnsLeft = 26
-PeckingOrder.State.TurnsLeft = 10
+--PeckingOrder.State.TurnsLeft = 10
 
 function onLoad(save_data)
     PeckingOrder.Events.OnLoad(save_data)

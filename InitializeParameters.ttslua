@@ -36,8 +36,8 @@ PeckingOrder.Initialize.Parameters.Players[2] = {
 }
 
 PeckingOrder.Initialize.Parameters.CustomDeck = {
-    face = "http://kccricket.net/tts/pecking-order/FullDeck-5x3-v20170514.jpg"
-    , back = "http://kccricket.net/tts/pecking-order/Card-Back.jpg"
+    face = "http://cloud-3.steamusercontent.com/ugc/1043093962818706664/C40FE98D4BC18E47F0D813F59B597FEFD85E8EB0/"
+    , back = "http://cloud-3.steamusercontent.com/ugc/1043093962819049892/A8F6A2CF21BFBC81C699A2A06B067DB992067364/"
     , width = 5
     , height = 3
     , number = 13
